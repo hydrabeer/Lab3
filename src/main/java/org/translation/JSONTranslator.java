@@ -78,10 +78,10 @@ public class JSONTranslator implements Translator {
 
     @Override
     public String translate(String country, String language) {
-        String code = ccv.fromCountry(country);
+        String contCode = ccv.fromCountry(country);
         String langCode = lcv.fromLanguage(language);
 
-        if (!this.getCountries().contains(code)) {
+        if (!this.getCountries().contains(contCode)) {
             return null;
         }
 
