@@ -27,13 +27,13 @@ public class CountryCodeConverterTest {
     @Test
     public void fromCountryNameCanada() {
         CountryCodeConverter converter = new CountryCodeConverter();
-        assertEquals(converter.fromCountry("Canada"), "can");
+        assertEquals("can", converter.fromCountry("Canada"));
     }
 
     @Test
     public void fromCountryNameChina() {
         CountryCodeConverter converter = new CountryCodeConverter();
-        assertEquals(converter.fromCountry("China"), "chn");
+        assertEquals("chn", converter.fromCountry("China"));
     }
 
     @Test

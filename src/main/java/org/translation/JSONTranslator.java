@@ -78,16 +78,16 @@ public class JSONTranslator implements Translator {
 
     @Override
     public String translate(String country, String language) {
-        String code = ccv.fromCountry(country);
+        String contCode = ccv.fromCountry(country);
         String langCode = lcv.fromLanguage(language);
 
-        if (!this.getCountries().contains(code)) {
+        if (!this.getCountries().contains(contCode)) {
             return null;
         }
 
         for (int i = 0; i < this.jsonArray.length(); i ++) {
             JSONObject el = this.jsonArray.getJSONObject(i);
-            if (el == JSONObject.NULL || el == null || el.getString("alpha3") != code)
+            if (el == JSONObject.NULL || el == null || el.getString("alpha3") != contCode)
                 continue;
             return el.getString(langCode);
         }
