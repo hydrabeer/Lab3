@@ -16,6 +16,7 @@ import org.json.JSONObject;
  */
 public class JSONTranslator implements Translator {
     private JSONArray jsonArray;
+    private CountryCodeConverter ccv = new CountryCodeConverter();
 
     /**
      * Constructs a JSONTranslator using data from the sample.json resources file.
@@ -74,9 +75,11 @@ public class JSONTranslator implements Translator {
 
     @Override
     public String translate(String country, String languageCode) {
-        if (country.length() != 3) {
-            country = (new CountryCodeConverter()).fromCountry(country);
-        }
+        // Country may be a name or code. Try assuming it is a code
+        if (!this.getCountries().contains(country)) {
+            country = ccv.fromCountry(country); // Convert name to code
+        } 
+        // If still doesn't exist, then it is not a supported country
         if (!this.getCountries().contains(country)) {
             return null;
         }
