@@ -13,6 +13,30 @@ public class CountryCodeConverterTest {
     }
 
     @Test
+    public void fromCountryCodeCanada() {
+        CountryCodeConverter converter = new CountryCodeConverter();
+        assertEquals("Canada", converter.fromCountryCode("can"));
+    }
+
+    @Test
+    public void fromCountryCodeChina() {
+        CountryCodeConverter converter = new CountryCodeConverter();
+        assertEquals("China", converter.fromCountryCode("chn"));
+    }
+
+    @Test
+    public void fromCountryNameCanada() {
+        CountryCodeConverter converter = new CountryCodeConverter();
+        assertEquals(converter.fromCountry("Canada"), "can");
+    }
+
+    @Test
+    public void fromCountryNameChina() {
+        CountryCodeConverter converter = new CountryCodeConverter();
+        assertEquals(converter.fromCountry("China"), "chn");
+    }
+
+    @Test
     public void fromCountryCodeAllLoaded() {
         CountryCodeConverter converter = new CountryCodeConverter();
         assertEquals(249, converter.getNumCountries());
