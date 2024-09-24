@@ -19,9 +19,9 @@ public class LanguageCodeConverterTest {
     }
 
     @Test
-    public void fromLanguageCodeES() {
+    public void fromLanguageCodeTR() {
         LanguageCodeConverter converter = new LanguageCodeConverter();
-        assertEquals("Spanish", converter.fromLanguageCode("es"));
+        assertEquals("Turkish", converter.fromLanguageCode("tr"));
     }
 
     @Test
