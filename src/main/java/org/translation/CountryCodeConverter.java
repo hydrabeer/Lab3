@@ -48,7 +48,6 @@ public class CountryCodeConverter {
                 }
 
                 String country = countryBuilder.toString();
-                System.out.println(country);
                 String countryCode = splitResult[splitResult.length - 2].toLowerCase();
                 countryToCode.put(country, countryCode);
                 codeToCountry.put(countryCode, country);
