@@ -51,7 +51,8 @@ public class JSONTranslator implements Translator {
             if (el.getString("alpha3").equals(countryCode))
                 for (String k : el.keySet()) {
                     if (!k.equals("id") && !k.equals("alpha2") && !k.equals("alpha3")) {
-                        out.add(el.getString(k));
+                        if (!k.equals(null))
+                            out.add(k);
                     }
                 }
         }
@@ -72,14 +73,17 @@ public class JSONTranslator implements Translator {
     }
 
     @Override
-    public String translate(String countryCode, String languageCode) {
-        if (!this.getCountries().contains(countryCode)) {
+    public String translate(String country, String languageCode) {
+        if (country.length() != 3) {
+            country = (new CountryCodeConverter()).fromCountry(country);
+        }
+        if (!this.getCountries().contains(country)) {
             return null;
         }
 
         for (int i = 0; i < this.jsonArray.length(); i ++) {
             JSONObject el = this.jsonArray.getJSONObject(i);
-            if (el.getString("alpha3").toLowerCase().equals(countryCode.toLowerCase()))
+            if (el.getString("alpha3").toLowerCase().equals(country.toLowerCase()))
                 return el.getString(languageCode);
         }
 
