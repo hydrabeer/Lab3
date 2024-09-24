@@ -16,8 +16,6 @@ import org.json.JSONObject;
  */
 public class JSONTranslator implements Translator {
     private JSONArray jsonArray;
-    private CountryCodeConverter ccv = new CountryCodeConverter();
-    private LanguageCodeConverter lcv = new LanguageCodeConverter();
 
     /**
      * Constructs a JSONTranslator using data from the sample.json resources file.
@@ -45,20 +43,17 @@ public class JSONTranslator implements Translator {
     }
 
     @Override
-    public List<String> getCountryLanguages(String country) {
-        String code = ccv.fromCountry(country);
+    public List<String> getCountryLanguages(String countryCode) {
         ArrayList<String> out = new ArrayList<>();
 
         for (int i = 0; i < this.jsonArray.length(); i ++) {
             JSONObject el = this.jsonArray.getJSONObject(i);
-            if (el == JSONObject.NULL || el == null || el.getString("alpha3") != code)
-                continue;
-
-            for (String k : el.keySet()) {
-                if (k != "id" && k != "alpha2" && k != "alpha3") {
-                    out.add(el.getString(k));
+            if (el.getString("alpha3").equals(countryCode))
+                for (String k : el.keySet()) {
+                    if (!k.equals("id") && !k.equals("alpha2") && !k.equals("alpha3")) {
+                        out.add(el.getString(k));
+                    }
                 }
-            }
         }
         return out;
     }
@@ -69,27 +64,23 @@ public class JSONTranslator implements Translator {
 
         for (int i = 0; i < this.jsonArray.length(); i ++) {
             JSONObject el = this.jsonArray.getJSONObject(i);
-            if (el == JSONObject.NULL || el == null) continue;
-            out.add(el.getString("alpha3"));
+            if (!el.getString("alpha3").equals(null))
+                out.add(el.getString("alpha3"));
         }
 
         return out;
     }
 
     @Override
-    public String translate(String country, String language) {
-        String contCode = ccv.fromCountry(country);
-        String langCode = lcv.fromLanguage(language);
-
-        if (!this.getCountries().contains(contCode)) {
+    public String translate(String countryCode, String languageCode) {
+        if (!this.getCountries().contains(countryCode)) {
             return null;
         }
 
         for (int i = 0; i < this.jsonArray.length(); i ++) {
             JSONObject el = this.jsonArray.getJSONObject(i);
-            if (el == JSONObject.NULL || el == null || el.getString("alpha3") != contCode)
-                continue;
-            return el.getString(langCode);
+            if (el.getString("alpha3").toLowerCase().equals(countryCode.toLowerCase()))
+                return el.getString(languageCode);
         }
 
         return null;
