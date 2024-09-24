@@ -49,7 +49,7 @@ public class CountryCodeConverter {
 
                 String country = countryBuilder.toString();
                 String countryCode = splitResult[splitResult.length - 2].toLowerCase();
-                countryToCode.put(country, countryCode);
+                countryToCode.put(country.toLowerCase(), countryCode);
                 codeToCountry.put(countryCode, country);
             }
         }
