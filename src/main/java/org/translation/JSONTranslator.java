@@ -15,8 +15,9 @@ import org.json.JSONObject;
  * data from a JSON file. The data is read in once each time an instance of this class is constructed.
  */
 public class JSONTranslator implements Translator {
-    private JSONArray jsonArray;
-    private CountryCodeConverter ccv = new CountryCodeConverter();
+    private final JSONArray jsonArray;
+    private final CountryCodeConverter ccv = new CountryCodeConverter();
+    private final String alpha3 = "alpha3";
 
     /**
      * Constructs a JSONTranslator using data from the sample.json resources file.
@@ -47,15 +48,17 @@ public class JSONTranslator implements Translator {
     public List<String> getCountryLanguages(String countryCode) {
         ArrayList<String> out = new ArrayList<>();
 
-        for (int i = 0; i < this.jsonArray.length(); i ++) {
+        for (int i = 0; i < this.jsonArray.length(); i++) {
             JSONObject el = this.jsonArray.getJSONObject(i);
-            if (el.getString("alpha3").equals(countryCode))
+            if (el.getString(alpha3).equals(countryCode)) {
                 for (String k : el.keySet()) {
-                    if (!k.equals("id") && !k.equals("alpha2") && !k.equals("alpha3")) {
-                        if (!k.equals(null))
+                    if (!"id".equals(k) && !"alpha2".equals(k) && !alpha3.equals(k)) {
+                        if (!k.equals(null)) {
                             out.add(k);
+                        }
                     }
                 }
+            }
         }
         return out;
     }
@@ -64,10 +67,11 @@ public class JSONTranslator implements Translator {
     public List<String> getCountries() {
         ArrayList<String> out = new ArrayList<>();
 
-        for (int i = 0; i < this.jsonArray.length(); i ++) {
+        for (int i = 0; i < this.jsonArray.length(); i++) {
             JSONObject el = this.jsonArray.getJSONObject(i);
-            if (!el.getString("alpha3").equals(null))
-                out.add(el.getString("alpha3"));
+            if (!el.getString(alpha3).equals(null)) {
+                out.add(el.getString(alpha3));
+            }
         }
 
         return out;
@@ -75,19 +79,18 @@ public class JSONTranslator implements Translator {
 
     @Override
     public String translate(String country, String languageCode) {
+        String countryCode = country;
         // Country may be a name or code. Try assuming it is a code
         if (!this.getCountries().contains(country)) {
-            country = ccv.fromCountry(country); // Convert name to code
-        } 
-        // If still doesn't exist, then it is not a supported country
-        if (!this.getCountries().contains(country)) {
-            return null;
+            // Convert name to code
+            countryCode = ccv.fromCountry(country);
         }
 
-        for (int i = 0; i < this.jsonArray.length(); i ++) {
+        for (int i = 0; i < this.jsonArray.length(); i++) {
             JSONObject el = this.jsonArray.getJSONObject(i);
-            if (el.getString("alpha3").toLowerCase().equals(country.toLowerCase()))
+            if (el.getString(alpha3).toLowerCase().equals(countryCode.toLowerCase())) {
                 return el.getString(languageCode);
+            }
         }
 
         return null;
